@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA CLÍNICA VIDA+ (Gráficos)</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container-app {
+            max-width: 1000px;
+            margin-top: 30px;
+        }
+        .header-title {
+            color: #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .appointment-card {
+            border-left: 5px solid #007bff;
+        }
+        .menu-icon {
+            font-size: 1.5rem;
+        }
+        .offcanvas-body .btn {
+            width: 100%;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .btn.header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            background: none;
+            transition: color 0.2s;
+        }
+        .btn.header-title:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <main id="root"></main>
+
+    <div class="modal fade" id="professorModal" tabindex="-1" aria-labelledby="professorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="professorModalLabel">Nota do Aluno</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Prezado Professor, Desenvolvi esse Sistema em JavaScript pois é a linguagem que eu Consegui aprender na correria deste ano, espero que a minha boa intenção seja levada em consideração, agradeço a Compreensão, Obrigado!.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const currentMonth = new Date().getMonth(); 
+        const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+
+        const initialPatients = [
+            { id: 1, nome: 'Ana Carolina Lima', idade: 28, telefone: '(11) 98765-4321', documento: '123.456.789-00', pagamentoUltimoMes: currentMonth }, 
+            { id: 2, nome: 'Bruno Teixeira Silva', idade: 45, telefone: '(11) 99999-0000', documento: '987.654.321-00', pagamentoUltimoMes: currentMonth },
+            { id: 3, nome: 'Carlos Eduardo Santos', idade: 62, telefone: '(21) 98888-1111', documento: '111.222.333-44', pagamentoUltimoMes: lastMonth },
+            { id: 4, nome: 'Daniela Ferreira Mendes', idade: 31, telefone: '(31) 97777-2222', documento: '555.666.777-88', pagamentoUltimoMes: lastMonth },
+            { id: 5, nome: 'Elisa Rodrigues Junior', idade: 19, telefone: '(41) 96666-3333', documento: '999.000.111-22', pagamentoUltimoMes: currentMonth },
+            { id: 6, nome: 'Felipe Gonçalves Oliveira', idade: 55, telefone: '(51) 95555-4444', documento: '333.444.555-66', pagamentoUltimoMes: lastMonth },
+            { id: 7, nome: 'Gabriela Alves Pereira', idade: 39, telefone: '(61) 94444-5555', documento: '777.888.999-00', pagamentoUltimoMes: currentMonth },
+            { id: 8, nome: 'Henrique Martins Costa', idade: 70, telefone: '(71) 93333-6666', documento: '000.111.222-33', pagamentoUltimoMes: lastMonth },
+            { id: 9, nome: 'Isabela Soares Neves', idade: 24, telefone: '(81) 92222-7777', documento: '444.555.666-77', pagamentoUltimoMes: currentMonth },
+            { id: 10, nome: 'Júlio César Pires', idade: 48, telefone: '(91) 91111-8888', documento: '888.999.000-11', pagamentoUltimoMes: lastMonth },
+        ];
+        
+        const DOCTORS = [
+            { id: '1', nome: 'Dr. João Mendes', especialidade: 'Clínico Geral' },
+            { id: '2', nome: 'Dra. Ana Costa', especialidade: 'Dermatologista' },
+            { id: '3', nome: 'Dr. Pedro Alvares', especialidade: 'Cardiologista' },
+        ];
+
+        const initialConsultas = [
+            { id: 1001, pacienteId: 1, pacienteNome: 'Ana Carolina Lima', medicoId: '1', medicoNome: 'Dr. João Mendes', data: '2025-12-05', horario: '09:00', motivo: 'Rotina e check-up anual' },
+            { id: 1002, pacienteId: 5, pacienteNome: 'Elisa Rodrigues Junior', medicoId: '1', medicoNome: 'Dr. João Mendes', data: '2025-12-05', horario: '09:30', motivo: 'Dor de cabeça persistente' },
+            { id: 1003, pacienteId: 8, pacienteNome: 'Henrique Martins Costa', medicoId: '1', medicoNome: 'Dr. João Mendes', data: '2025-12-06', horario: '14:00', motivo: 'Solicitação de exames' },
+            { id: 1004, pacienteId: 2, pacienteNome: 'Bruno Teixeira Silva', medicoId: '2', medicoNome: 'Dra. Ana Costa', data: '2025-12-05', horario: '10:00', motivo: 'Avaliação de mancha na pele' },
+            { id: 1005, pacienteId: 7, pacienteNome: 'Gabriela Alves Pereira', medicoId: '2', medicoNome: 'Dra. Ana Costa', data: '2025-12-05', horario: '10:30', motivo: 'Revisão de tratamento acne' },
+            { id: 1006, pacienteId: 3, pacienteNome: 'Carlos Eduardo Santos', medicoId: '3', medicoNome: 'Dr. Pedro Alvares', data: '2025-12-06', horario: '08:00', motivo: 'Reavaliação cardiológica' },
+            { id: 1007, pacienteId: 6, pacienteNome: 'Felipe Gonçalves Oliveira', medicoId: '3', medicoNome: 'Dr. Pedro Alvares', data: '2025-12-06', horario: '08:30', motivo: 'Sintomas de palpitação' },
+            { id: 1008, pacienteId: 10, pacienteNome: 'Júlio César Pires', medicoId: '3', medicoNome: 'Dr. Pedro Alvares', data: '2025-12-06', horario: '09:00', motivo: 'Pré-operatório' },
+        ];
+
+
+        const ChartComponent = React.memo(({ chartId, type, data, options }) => {
+            const canvasRef = React.useRef(null);
+            const chartRef = React.useRef(null);
+
+            React.useEffect(() => {
+                if (chartRef.current) {
+                    chartRef.current.destroy();
+                }
+
+                if (canvasRef.current) {
+                    const ctx = canvasRef.current.getContext('2d');
+                    chartRef.current = new Chart(ctx, {
+                        type,
+                        data,
+                        options,
+                    });
+                }
+
+                return () => {
+                    if (chartRef.current) {
+                        chartRef.current.destroy();
+                    }
+                };
+            }, [type, data, options]);
+
+            return <canvas id={chartId} ref={canvasRef} />;
+        });
+        
+        const checkPaymentStatus = (patient) => {
+            const currentMonth = new Date().getMonth();
+            return patient.pagamentoUltimoMes === currentMonth ? 'Em dia' : 'Pendente';
+        };
+
+
+        function SistemaClinicaVidaMais() {
+            const [pacientes, setPacientes] = React.useState(initialPatients);
+            const [consultas, setConsultas] = React.useState(initialConsultas);
+            const [view, setView] = React.useState('menu');
+            const [feedback, setFeedback] = React.useState('');
+            
+            const [patientForm, setPatientForm] = React.useState({ nome: '', idade: '', telefone: '', documento: '' });
+            
+            const [scheduleForm, setScheduleForm] = React.useState({
+                pacienteId: '', medicoId: '', data: '', horario: '', motivo: ''
+            });
+            const [searchTerm, setSearchTerm] = React.useState('');
+            
+            React.useEffect(() => {
+                if (window.bootstrap) {
+                    const modalElement = document.getElementById('professorModal');
+                    const professorModal = new bootstrap.Modal(modalElement);
+                    professorModal.show();
+                }
+            }, []);
+
+            const closeOffcanvas = () => {
+                const offcanvasElement = document.getElementById('offcanvasMenu');
+                if (offcanvasElement && window.bootstrap) {
+                    const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement) || new bootstrap.Offcanvas(offcanvasElement);
+                    offcanvas.hide();
+                }
+            };
+            
+            const handleNavigation = (targetView) => {
+                setFeedback('');
+                setView(targetView);
+                closeOffcanvas();
+            };
+            
+            const handlePatientFormChange = (e) => {
+                setPatientForm({ ...patientForm, [e.target.name]: e.target.value });
+            };
+
+            const handleRegister = (e) => {
+                e.preventDefault();
+                setFeedback('');
+
+                const { nome, idade, telefone, documento } = patientForm;
+                const idadeNum = parseInt(idade);
+
+                if (!nome || !idadeNum || !telefone || !documento || isNaN(idadeNum) || idadeNum <= 0) {
+                    setFeedback('ERRO: Preencha todos os campos corretamente, incluindo o CPF/RG (Documento).');
+                    return;
+                }
+                
+                const novoPaciente = {
+                    id: Date.now(), 
+                    nome, idade: idadeNum, telefone, documento, 
+                    pagamentoUltimoMes: new Date().getMonth()
+                };
+
+                setPacientes([...pacientes, novoPaciente]);
+                setPatientForm({ nome: '', idade: '', telefone: '', documento: '' }); 
+                setFeedback(`Paciente ${nome} cadastrado com sucesso!`);
+                setView('list'); 
+            };
+            
+            const handleConfirmPayment = (patientId) => {
+                const updatedPatients = pacientes.map(p => {
+                    if (p.id === patientId) {
+                        return { ...p, pagamentoUltimoMes: new Date().getMonth() };
+                    }
+                    return p;
+                });
+                setPacientes(updatedPatients);
+                setFeedback(`Pagamento de ${pacientes.find(p => p.id === patientId).nome} confirmado com sucesso!`);
+            };
+
+
+            const renderPaymentView = () => {
+                const patientsWithStatus = pacientes.map(p => ({
+                    ...p,
+                    status: checkPaymentStatus(p)
+                }));
+                
+                const pendingPayments = patientsWithStatus.filter(p => p.status === 'Pendente');
+
+                return (
+                    <section className="card shadow p-4">
+                        <h4 className="card-title text-danger"><i className="bi bi-cash-stack"></i> Gerenciar Pagamentos</h4>
+                        
+                        <div className="alert alert-warning">
+                            <h5 className="alert-heading">Pacientes com Pagamento Pendente ({pendingPayments.length}):</h5>
+                            {pendingPayments.length === 0 ? (
+                                <p className="mb-0">Todos os pacientes estão com os pagamentos em dia!</p>
+                            ) : (
+                                <ul className="list-group">
+                                    {pendingPayments.map(p => (
+                                        <li key={p.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                            {p.nome} (Doc: {p.documento})
+                                            <button 
+                                                className="btn btn-sm btn-success" 
+                                                onClick={() => handleConfirmPayment(p.id)}
+                                            >
+                                                <i className="bi bi-check2"></i> Confirmar Pagamento
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                        
+                        <h5 className="mt-4 text-primary">Todos os Pacientes:</h5>
+                        <ul className="list-group">
+                            {patientsWithStatus.map(p => (
+                                <li key={p.id} className={`list-group-item d-flex justify-content-between align-items-center ${p.status === 'Pendente' ? 'list-group-item-danger' : 'list-group-item-light'}`}>
+                                    {p.nome}
+                                    <span className={`badge ${p.status === 'Em dia' ? 'bg-success' : 'bg-danger'}`}>
+                                        {p.status}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                );
+            };
+
+
+            const getStatisticsData = React.useCallback(() => {
+                if (pacientes.length === 0) {
+                    return { total: 0, media: 0, maisNovo: 'N/A', maisVelho: 'N/A', chartIdades: null, chartConsultas: null };
+                }
+
+                const total = pacientes.length;
+                const somaIdades = pacientes.reduce((acc, p) => acc + p.idade, 0);
+                
+                const idadeMedia = Math.floor(somaIdades / total); 
+                
+                const maisNovo = pacientes.reduce((min, p) => p.idade < min.idade ? p : min, pacientes[0]);
+                const maisVelho = pacientes.reduce((max, p) => p.idade > max.idade ? p : max, pacientes[0]);
+
+                const faixas = { '18-30': 0, '31-50': 0, '51-70': 0, '70+': 0 };
+                pacientes.forEach(p => {
+                    if (p.idade <= 30) faixas['18-30']++;
+                    else if (p.idade <= 50) faixas['31-50']++;
+                    else if (p.idade <= 70) faixas['51-70']++;
+                    else faixas['70+']++;
+                });
+
+                const chartIdadesData = {
+                    labels: Object.keys(faixas),
+                    datasets: [{
+                        label: 'Pacientes por Faixa Etária',
+                        data: Object.values(faixas),
+                        backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
+                        borderWidth: 1
+                    }]
+                };
+
+                const contagemConsultas = {};
+                DOCTORS.forEach(d => contagemConsultas[d.nome] = 0);
+                consultas.forEach(c => {
+                    if (contagemConsultas.hasOwnProperty(c.medicoNome)) {
+                         contagemConsultas[c.medicoNome]++;
+                    }
+                });
+
+                const chartConsultasData = {
+                    labels: Object.keys(contagemConsultas),
+                    datasets: [{
+                        label: 'Consultas por Médico',
+                        data: Object.values(contagemConsultas),
+                        backgroundColor: ['#007bff80', '#28a74580', '#ffc10780'],
+                        borderColor: ['#007bff', '#28a745', '#ffc107'],
+                        borderWidth: 1
+                    }]
+                };
+
+                return {
+                    total, media: idadeMedia,
+                    maisNovo: `${maisNovo.nome} (${maisNovo.idade} anos)`,
+                    maisVelho: `${maisVelho.nome} (${maisVelho.idade} anos)`,
+                    chartIdades: chartIdadesData,
+                    chartConsultas: chartConsultasData
+                };
+            }, [pacientes, consultas]);
+            
+            const getSortedPatients = React.useCallback(() => {
+                return [...pacientes].sort((a, b) => a.nome.localeCompare(b.nome));
+            }, [pacientes]);
+
+            const searchResults = React.useMemo(() => {
+                if (!searchTerm.trim()) return [];
+                const term = searchTerm.toLowerCase();
+                return pacientes.filter(p => p.nome.toLowerCase().includes(term));
+            }, [pacientes, searchTerm]);
+
+
+            const handleScheduleChange = (e) => {
+                setScheduleForm({ ...scheduleForm, [e.target.name]: e.target.value });
+            };
+
+            const checkDoctorAvailability = (medicoId, data, horario) => {
+                return !consultas.some(consulta => 
+                    consulta.medicoId === medicoId &&
+                    consulta.data === data &&
+                    consulta.horario === horario
+                );
+            };
+
+            const handleScheduleSubmit = (e) => {
+                e.preventDefault();
+                setFeedback('');
+
+                const { pacienteId, medicoId, data, horario, motivo } = scheduleForm;
+
+                if (!pacienteId || !medicoId || !data || !horario || !motivo) {
+                    setFeedback('ERRO: Todos os campos do agendamento são obrigatórios.');
+                    return;
+                }
+                
+                const paciente = pacientes.find(p => p.id === parseInt(pacienteId));
+
+                
+                if (!paciente.documento) {
+                    setFeedback(`ERRO: Agendamento negado. O paciente ${paciente.nome} não tem CPF/RG cadastrado (Documentos OK = Falso).`);
+                    return;
+                }
+
+                
+                if (!checkDoctorAvailability(medicoId, data, horario)) {
+                    setFeedback(`ERRO: Agendamento negado. O médico já tem uma consulta agendada para ${horario} em ${data}.`);
+                    return;
+                }
+                
+                
+                const pagamentoStatus = checkPaymentStatus(paciente);
+                if (pagamentoStatus === 'Pendente') {
+                    setFeedback(`ERRO: Agendamento negado. O paciente ${paciente.nome} está com pagamento **Pendente**. Verifique em "Gerenciar Pagamentos".`);
+                    return;
+                }
+                
+                
+                const medico = DOCTORS.find(d => d.id === medicoId);
+
+                const novaConsulta = {
+                    id: Date.now(),
+                    pacienteId: paciente.id, pacienteNome: paciente.nome,
+                    medicoId: medico.id, medicoNome: medico.nome,
+                    data, horario, motivo,
+                };
+
+                setConsultas([...consultas, novaConsulta]);
+                setScheduleForm({ pacienteId: '', medicoId: '', data: '', horario: '', motivo: '' });
+                setFeedback(`Consulta agendada para ${paciente.nome} com ${medico.nome} em ${data} às ${horario}!`);
+                setView('viewSchedule'); 
+            };
+            
+            const handleEmergencySubmit = (e) => {
+                e.preventDefault();
+                setFeedback('');
+
+                const { pacienteId, medicoId, data, horario, motivo } = scheduleForm;
+
+                if (!pacienteId || !medicoId || !data || !horario || !motivo) {
+                    setFeedback('ERRO: Todos os campos do agendamento de emergência são obrigatórios.');
+                    return;
+                }
+                
+                const paciente = pacientes.find(p => p.id === parseInt(pacienteId));
+                
+                
+                const hasDocument = !!paciente.documento; 
+                const isDoctorAvailable = checkDoctorAvailability(medicoId, data, horario); 
+                const isPaymentUpToDate = checkPaymentStatus(paciente) === 'Em dia'; 
+
+                const isEmergencyAdmitted = isDoctorAvailable && (hasDocument || isPaymentUpToDate);
+
+                let denialReason = '';
+
+                if (!isDoctorAvailable) {
+                    denialReason = `Médico indisponível no horário solicitado (${data} às ${horario}).`;
+                } else if (!hasDocument && !isPaymentUpToDate) {
+                    denialReason = 'O paciente não possui documentos cadastrados E o pagamento está pendente.';
+                }
+                
+                if (!isEmergencyAdmitted) {
+                    setFeedback(`ERRO: Atendimento de emergência negado. ${denialReason}`);
+                    return;
+                }
+                
+                
+                const medico = DOCTORS.find(d => d.id === medicoId);
+
+                const novaConsulta = {
+                    id: Date.now(),
+                    pacienteId: paciente.id, pacienteNome: paciente.nome,
+                    medicoId: medico.id, medicoNome: medico.nome,
+                    data, horario, motivo: `[EMERGÊNCIA] - ${motivo}`, 
+                };
+
+                setConsultas([...consultas, novaConsulta]);
+                setScheduleForm({ pacienteId: '', medicoId: '', data: '', horario: '', motivo: '' });
+                setFeedback(`Emergência de ${paciente.nome} admitida com ${medico.nome} em ${data} às ${horario}!`);
+                setView('viewSchedule'); 
+            };
+
+
+            const renderHomeView = React.useCallback(() => {
+                
+                const now = new Date();
+                const currentDateString = now.toISOString().split('T')[0];
+                const currentTimeString = now.toTimeString().split(' ')[0].substring(0, 5); 
+
+                const totalConsultas = consultas.length;
+                
+                const busyDoctorsTodayIds = new Set();
+                const totalDoctors = DOCTORS.length;
+
+                consultas.forEach(c => {
+                    
+                    if (c.data === currentDateString && c.horario >= currentTimeString) {
+                        busyDoctorsTodayIds.add(c.medicoId);
+                    }
+                });
+                
+                const availableDoctorsToday = DOCTORS.filter(d => !busyDoctorsTodayIds.has(d.id));
+                const availableDoctorsCount = availableDoctorsToday.length;
+
+                let availableDoctorsMessage;
+                if (availableDoctorsCount > 1) {
+                    availableDoctorsMessage = 'Vários médicos disponíveis para consulta.';
+                } else if (availableDoctorsCount === 1) {
+                    availableDoctorsMessage = `O médico disponível é: ${availableDoctorsToday[0].nome}`;
+                } else {
+                    availableDoctorsMessage = 'Nenhum médico disponível no momento.';
+                }
+
+                return (
+                    <section className="card shadow p-4">
+                        <h4 className="card-title text-primary"><i className="bi bi-house-door"></i> Dashboard Vida+</h4>
+                        
+                        <hr className="mb-4"/>
+
+                        <div className="row g-3">
+                            
+                            <div className="col-md-6">
+                                <div className="card text-white bg-info h-100">
+                                    <div className="card-body">
+                                        <h5 className="card-title"><i className="bi bi-calendar-check"></i> Consultas Marcadas (Total)</h5>
+                                        <p className="fs-1 fw-bold">{totalConsultas}</p>
+                                        <p className="card-text"><small>Total de agendamentos registrados no sistema.</small></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-md-6">
+                                <div className="card text-white bg-success h-100">
+                                    <div className="card-body">
+                                        <h5 className="card-title"><i className="bi bi-person-heart"></i> Médicos Disponíveis (Hoje)</h5>
+                                        <p className="fs-1 fw-bold">{availableDoctorsCount} de {totalDoctors}</p>
+                                        <p className="card-text"><small>{availableDoctorsMessage}</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="col-md-12 mt-4">
+                                <button className="btn btn-danger w-100 p-3 shadow" onClick={() => handleNavigation('emergency')}>
+                                    <h5 className="mb-0"><i className="bi bi-heart-pulse"></i> Iniciar Atendimento de Emergência</h5>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <p className="mt-4 lead text-center text-secondary">
+                            Use o **menu sanduíche** (<i className="bi bi-list"></i>) no canto superior para acessar as funcionalidades.
+                        </p>
+                    </section>
+                );
+            }, [consultas]);
+
+            const renderRegisterForm = () => (
+                <section className="card shadow p-4">
+                    <h4 className="card-title text-success"><i className="bi bi-person-add"></i> Cadastro de Paciente</h4>
+                    <form onSubmit={handleRegister}>
+                        <div className="mb-3">
+                            <label className="form-label visually-hidden" htmlFor="nome">Nome:</label>
+                            <input type="text" className="form-control" name="nome" placeholder="Nome Completo" value={patientForm.nome} onChange={handlePatientFormChange} required />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label visually-hidden" htmlFor="documento">CPF/RG:</label>
+                            <input type="text" className="form-control" name="documento" placeholder="CPF ou RG (Obrigatório para Agendamento)" value={patientForm.documento} onChange={handlePatientFormChange} required />
+                        </div>
+                        <div className="row">
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label visually-hidden" htmlFor="idade">Idade:</label>
+                                <input type="number" className="form-control" name="idade" placeholder="Idade" value={patientForm.idade} onChange={handlePatientFormChange} required min="1" max="150" />
+                            </div>
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label visually-hidden" htmlFor="telefone">Telefone:</label>
+                                <input type="text" className="form-control" name="telefone" placeholder="Telefone (ex: 11 9xxxx-xxxx)" value={patientForm.telefone} onChange={handlePatientFormChange} />
+                            </div>
+                        </div>
+                        <button type="submit" className="btn btn-success w-100">Cadastrar Paciente</button>
+                    </form>
+                </section>
+            );
+
+            
+            const renderStatistics = () => {
+                const stats = getStatisticsData();
+                return (
+                    <section className="card shadow p-4">
+                        <h4 className="card-title text-primary"><i className="bi bi-bar-chart-line"></i> Estatísticas Precisas da Clínica</h4>
+                        
+                        {stats.total === 0 ? (
+                            <p className="alert alert-info">Nenhum paciente cadastrado.</p>
+                        ) : (
+                            <>
+                                <div className="row mb-4">
+                                    <div className="col-lg-12">
+                                        <ul className="list-group list-group-horizontal-lg list-group-flush mb-3">
+                                            <li className="list-group-item flex-fill text-center">
+                                                Total de Pacientes: <span className="badge bg-primary fs-6">{stats.total}</span>
+                                            </li>
+                                            <li className="list-group-item flex-fill text-center">
+                                                Idade Média (Anos Inteiros): <span className="badge bg-secondary fs-6">{stats.media}</span>
+                                            </li>
+                                            <li className="list-group-item flex-fill">
+                                                Mais Novo: {stats.maisNovo}
+                                            </li>
+                                            <li className="list-group-item flex-fill">
+                                                Mais Velho: {stats.maisVelho}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div className="row">
+                                    <div className="col-md-6 mb-4">
+                                        <h6 className="text-center text-success">Distribuição de Pacientes por Idade</h6>
+                                        <div className="card p-3">
+                                            <ChartComponent 
+                                                chartId="chartIdades" 
+                                                type="bar" 
+                                                data={stats.chartIdades} 
+                                                options={{ responsive: true, scales: { y: { beginAtZero: true } } }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6 mb-4">
+                                        <h6 className="text-center text-primary">Consultas Agendadas por Médico</h6>
+                                        <div className="card p-3">
+                                            <ChartComponent 
+                                                chartId="chartConsultas" 
+                                                type="doughnut" 
+                                                data={stats.chartConsultas} 
+                                                options={{ responsive: true, plugins: { legend: { position: 'bottom' } } }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </section>
+                );
+            };
+
+            const renderSearchPatient = () => (
+                <section className="card shadow p-4">
+                    <h4 className="card-title text-warning"><i className="bi bi-search"></i> Busca de Paciente</h4>
+                    <div className="mb-3">
+                        <input 
+                            type="search" 
+                            className="form-control" 
+                            placeholder="Buscar paciente pelo nome..." 
+                            value={searchTerm} 
+                            onChange={(e) => setSearchTerm(e.target.value)} 
+                        />
+                    </div>
+                    
+                    {searchTerm.trim() && (
+                        <div>
+                            <h5>Resultados Encontrados ({searchResults.length}):</h5>
+                            {searchResults.length > 0 ? (
+                                searchResults.map(p => (
+                                    <div key={p.id} className="card p-2 mb-2 bg-light">
+                                        {p.nome} - Idade: {p.idade} | Documento: {p.documento} | Tel: {p.telefone}
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="alert alert-warning">Nenhum resultado para "{searchTerm}".</p>
+                            )}
+                        </div>
+                    )}
+                </section>
+            );
+
+            const renderListPatients = () => {
+                const sortedPatients = getSortedPatients();
+                return (
+                    <section className="card shadow p-4">
+                        <h4 className="card-title text-info"><i className="bi bi-people"></i> Lista de Pacientes ({pacientes.length})</h4>
+                        {pacientes.length === 0 ? (
+                            <p className="alert alert-info">A lista está vazia.</p>
+                        ) : (
+                            <ul className="list-group">
+                                {sortedPatients.map((p) => (
+                                    <li key={p.id} className="list-group-item d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div className="fw-bold">{p.nome}</div> 
+                                            Idade: {p.idade} | Documento: {p.documento} | Tel: {p.telefone}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </section>
+                );
+            };
+
+            const renderScheduleForm = () => {
+                const availableHours = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"];
+                
+                return (
+                    <section className="card shadow p-4">
+                        <h4 className="card-title text-primary"><i className="bi bi-calendar-plus"></i> Agendar Nova Consulta (Normal)</h4>
+                        <form onSubmit={handleScheduleSubmit}>
+                            
+                            <div className="mb-3">
+                                <label className="form-label visually-hidden">Paciente</label>
+                                <select className="form-select" name="pacienteId" value={scheduleForm.pacienteId} onChange={handleScheduleChange} required>
+                                    <option value="">Selecione o Paciente</option>
+                                    {pacientes.map(p => (
+                                        <option key={p.id} value={p.id}>{p.nome} (Doc: {p.documento ? 'OK' : 'Faltando'} | Pgto: {checkPaymentStatus(p)})</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label visually-hidden">Médico</label>
+                                <select className="form-select" name="medicoId" value={scheduleForm.medicoId} onChange={handleScheduleChange} required>
+                                    <option value="">Selecione o Médico</option>
+                                    {DOCTORS.map(d => (
+                                        <option key={d.id} value={d.id}>{d.nome} ({d.especialidade})</option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label visually-hidden">Data</label>
+                                    <input type="date" className="form-control" name="data" value={scheduleForm.data} onChange={handleScheduleChange} required />
+                                </div>
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label visually-hidden">Horário</label>
+                                    <select className="form-select" name="horario" value={scheduleForm.horario} onChange={handleScheduleChange} required>
+                                        <option value="">Horário</option> 
+                                        {availableHours.map(hour => (
+                                            <option key={hour} value={hour}>{hour}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div className="mb-3">
+                                <label className="form-label visually-hidden">Motivo</label>
+                                <textarea className="form-control" name="motivo" placeholder="Motivo da Consulta (ex: Rotina, Sintomas)" value={scheduleForm.motivo} onChange={handleScheduleChange} required rows="2"></textarea>
+                            </div>
+
+                            <button type="submit" className="btn btn-primary w-100">Confirmar Agendamento</button>
+                        </form>
+                    </section>
+                );
+            };
+
+            const renderEmergencyForm = () => {
+                const availableHours = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"];
+                
+                return (
+                    <section className="card shadow p-4">
+                        <h4 className="card-title text-danger"><i className="bi bi-heart-pulse"></i> Atendimento de Emergência</h4>
+                        <form onSubmit={handleEmergencySubmit}>
+                            
+                            <div className="mb-3">
+                                <label className="form-label visually-hidden">Paciente</label>
+                                <select className="form-select" name="pacienteId" value={scheduleForm.pacienteId} onChange={handleScheduleChange} required>
+                                    <option value="">Selecione o Paciente</option>
+                                    {pacientes.map(p => (
+                                        <option key={p.id} value={p.id}>{p.nome} (Doc: {p.documento ? 'OK' : 'Faltando'} | Pgto: {checkPaymentStatus(p)})</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label visually-hidden">Médico</label>
+                                <select className="form-select" name="medicoId" value={scheduleForm.medicoId} onChange={handleScheduleChange} required>
+                                    <option value="">Selecione o Médico</option>
+                                    {DOCTORS.map(d => (
+                                        <option key={d.id} value={d.id}>{d.nome} ({d.especialidade})</option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label visually-hidden">Data</label>
+                                    <input type="date" className="form-control" name="data" value={scheduleForm.data} onChange={handleScheduleChange} required />
+                                </div>
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label visually-hidden">Horário</label>
+                                    <select className="form-select" name="horario" value={scheduleForm.horario} onChange={handleScheduleChange} required>
+                                        <option value="">Horário</option> 
+                                        {availableHours.map(hour => (
+                                            <option key={hour} value={hour}>{hour}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div className="mb-3">
+                                <label className="form-label visually-hidden">Motivo</label>
+                                <textarea className="form-control" name="motivo" placeholder="Motivo da Emergência" value={scheduleForm.motivo} onChange={handleScheduleChange} required rows="2"></textarea>
+                            </div>
+
+                            <button type="submit" className="btn btn-danger w-100">Confirmar Atendimento de Emergência</button>
+                        </form>
+                    </section>
+                );
+            };
+
+            const renderViewSchedule = () => (
+                <section className="card shadow p-4">
+                    <h4 className="card-title text-secondary"><i className="bi bi-calendar-event"></i> Consultas Agendadas ({consultas.length})</h4>
+                    {consultas.length === 0 ? (
+                        <p className="alert alert-info">Nenhuma consulta agendada.</p>
+                    ) : (
+                        <div className="list-group">
+                            {consultas
+                                .sort((a, b) => new Date(`${a.data} ${a.horario}`) - new Date(`${b.data} ${b.horario}`))
+                                .map(c => (
+                                <div key={c.id} className="list-group-item appointment-card mb-2">
+                                    <div className="d-flex w-100 justify-content-between">
+                                        <h6 className="mb-1 text-primary">Consulta de {c.pacienteNome}</h6>
+                                        <small className="text-muted">{c.data} às {c.horario}</small>
+                                    </div>
+                                    <p className="mb-1">
+                                        Médico: {c.medicoNome}
+                                    </p>
+                                    <small>Motivo: {c.motivo}</small>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </section>
+            );
+
+            let content;
+            switch (view) {
+                case 'register': content = renderRegisterForm(); break;
+                case 'stats': content = renderStatistics(); break;
+                case 'search': content = renderSearchPatient(); break;
+                case 'list': content = renderListPatients(); break;
+                case 'schedule': content = renderScheduleForm(); break;
+                case 'emergency': content = renderEmergencyForm(); break; 
+                case 'viewSchedule': content = renderViewSchedule(); break;
+                case 'payment': content = renderPaymentView(); break; 
+                case 'exit': content = <div className="text-center p-5"><h4 className="text-danger">Sistema Encerrado. 👋</h4></div>; break;
+                case 'menu': default: content = renderHomeView(); break;
+            }
+
+
+            return (
+                <div className="container container-app">
+                    <header className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                        <button className="btn header-title mb-0 p-0" onClick={() => handleNavigation('menu')}>
+                            CLÍNICA VIDA+
+                        </button>
+                        
+                        <button 
+                            className="btn btn-primary menu-icon" 
+                            type="button" 
+                            data-bs-toggle="offcanvas" 
+                            data-bs-target="#offcanvasMenu" 
+                            aria-controls="offcanvasMenu"
+                            title="Menu"
+                        >
+                            <i className="bi bi-list"></i>
+                        </button>
+                    </header>
+                    
+                    <nav 
+                        className="offcanvas offcanvas-start" 
+                        tabIndex="-1" 
+                        id="offcanvasMenu" 
+                        aria-labelledby="offcanvasMenuLabel"
+                    >
+                        <div className="offcanvas-header">
+                            <h5 className="offcanvas-title" id="offcanvasMenuLabel">Opções do Sistema</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div className="offcanvas-body d-grid">
+                            <button className="btn btn-outline-success" onClick={() => handleNavigation('register')}>
+                                <i className="bi bi-person-add"></i> Novo Paciente
+                            </button>
+                            <button className="btn btn-outline-info" onClick={() => handleNavigation('list')}>
+                                <i className="bi bi-people"></i> Lista de Pacientes
+                            </button>
+                            <button className="btn btn-outline-warning" onClick={() => handleNavigation('search')}>
+                                <i className="bi bi-search"></i> Buscar Paciente
+                            </button>
+                            <button className="btn btn-outline-primary" onClick={() => handleNavigation('stats')}>
+                                <i className="bi bi-bar-chart-line"></i> Estatísticas
+                            </button>
+
+                            <hr />
+
+                            <button className="btn btn-danger" onClick={() => handleNavigation('emergency')}>
+                                <i className="bi bi-heart-pulse"></i> Iniciar Emergência
+                            </button>
+                            <button className="btn btn-primary" onClick={() => handleNavigation('schedule')}>
+                                <i className="bi bi-calendar-plus"></i> Agendar Consulta
+                            </button>
+                            <button className="btn btn-secondary" onClick={() => handleNavigation('viewSchedule')}>
+                                <i className="bi bi-calendar-event"></i> Ver Consultas
+                            </button>
+                            <button className="btn btn-dark" onClick={() => handleNavigation('payment')}>
+                                <i className="bi bi-cash-stack"></i> Gerenciar Pagamentos
+                            </button>
+                            
+                            <hr />
+                            
+                            <button className="btn btn-danger" onClick={() => handleNavigation('exit')}>
+                                <i className="bi bi-box-arrow-right"></i> Sair
+                            </button>
+                        </div>
+                    </nav>
+
+                    {feedback && (
+                        <div className={`alert ${feedback.includes('ERRO') ? 'alert-danger' : 'alert-success'}`} role="alert" dangerouslySetInnerHTML={{ __html: feedback }}>
+                        </div>
+                    )}
+                    
+                    <div className="mt-4">
+                        {content}
+                    </div>
+
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<SistemaClinicaVidaMais />);
+    </script>
+</body>
+</html>
